@@ -1,0 +1,138 @@
+Slip – 4
+1. Create a Simple Application Which Demonstrates the Life Cycle of Activity.
+Code : activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activity Lifecycle Demo"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#000000"/>
+</LinearLayout>
+MainActivity.java –
+package com.example.lifecycleapp;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "ActivityLifecycle";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        showToastAndLog("onCreate");
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showToastAndLog("onStart");
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showToastAndLog("onResume");
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        showToastAndLog("onPause");
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        showToastAndLog("onStop");
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        showToastAndLog("onRestart");
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        showToastAndLog("onDestroy");
+    }
+    private void showToastAndLog(String methodName) {
+        Toast.makeText(this, methodName + " called", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, methodName + " called");
+    }
+}
+go to Logcat tab and filter by:
+TAG: ActivityLifecycle
+2. Construct an app to display the image on date wise.
+Code : Add Images:
+Put your date-based images in the res/drawable/ folder. Use a consistent format like:
+img_20250417.png
+img_20250418.jpg
+img_20250419.png
+activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="true"
+        android:layout_marginBottom="16dp"/>
+    <Button
+        android:id="@+id/btnShowImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Image"/>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="Image will be displayed here" />
+</LinearLayout>
+
+MainActivity.java –
+package com.example.dateimageapp;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.*;
+import java.util.Calendar;
+public class MainActivity extends AppCompatActivity {
+    DatePicker datePicker;
+    Button btnShowImage;
+    ImageView imageView;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        datePicker = findViewById(R.id.datePicker);
+        btnShowImage = findViewById(R.id.btnShowImage);
+        imageView = findViewById(R.id.imageView);
+        btnShowImage.setOnClickListener(v -> {
+            int day = datePicker.getDayOfMonth();
+            int month = datePicker.getMonth() + 1; // Months are 0-based
+            int year = datePicker.getYear();
+            String dateKey = String.format("img_%04d%02d%02d", year, month, day); // e.g., img_20250417
+            int imageResId = getResources().getIdentifier(dateKey, "drawable", getPackageName());
+            if (imageResId != 0) {
+                imageView.setImageResource(imageResId);
+            } else {
+                Toast.makeText(MainActivity.this, "No image for this date!", Toast.LENGTH_SHORT).show();
+                imageView.setImageResource(0); // Clear image
+            }
+        });
+    }
+}

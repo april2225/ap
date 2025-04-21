@@ -1,0 +1,146 @@
+Slip -25
+1. Write an Android code to merge given two Array/List. 10M
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <Button
+        android:id="@+id/btnMergeArrays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Merge Arrays"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvMergedResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Merged Array will appear here"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
+
+MainActivity.java file -
+package com.example.mergearrays;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button btnMergeArrays;
+    TextView tvMergedResult;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnMergeArrays = findViewById(R.id.btnMergeArrays);
+        tvMergedResult = findViewById(R.id.tvMergedResult);
+
+        btnMergeArrays.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Arrays to be merged
+                String[] array1 = {"Apple", "Banana", "Cherry"};
+                String[] array2 = {"Date", "Elderberry", "Fig"};
+
+                // Merging arrays using ArrayList
+                ArrayList<String> mergedList = new ArrayList<>();
+                mergedList.addAll(Arrays.asList(array1));
+                mergedList.addAll(Arrays.asList(array2));
+
+                // Convert merged list to a string for displaying
+                String mergedResult = mergedList.toString();
+                
+                // Display merged result
+                tvMergedResult.setText("Merged Array: " + mergedResult);
+            }
+        });
+    }
+}
+
+2. Create an Android Application that Demonstrate TimePickerand display Selected Time
+on TextView. 15M
+code :  activity_main.xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"
+        android:is24HourView="true" />
+
+    <Button
+        android:id="@+id/btnShowTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Selected Time"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selected time will appear here"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"/>
+
+</LinearLayout>
+
+MainActivity.java file
+package com.example.timepickerexample;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    TimePicker timePicker;
+    Button btnShowTime;
+    TextView textTime;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        timePicker = findViewById(R.id.timePicker);
+        btnShowTime = findViewById(R.id.btnShowTime);
+        textTime = findViewById(R.id.textTime);
+
+        timePicker.setIs24HourView(true); // Optional, for 24-hour format
+
+        btnShowTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int hour = timePicker.getHour();
+                int minute = timePicker.getMinute();
+                String selectedTime = String.format("Selected Time: %02d:%02d", hour, minute);
+                textTime.setText(selectedTime);
+            }
+        });
+    }
+}
+

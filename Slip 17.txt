@@ -1,0 +1,238 @@
+Slip – 17
+1. Create a Simple Application that performs Arithmetic Operations. (Use constraint layout)
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+    <EditText
+        android:id="@+id/number1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter first number"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <EditText
+        android:id="@+id/number2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter second number"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@id/number1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result: "
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/number2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp" />
+    <Button
+        android:id="@+id/addBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+"
+        app:layout_constraintTop_toBottomOf="@id/result"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+    <Button
+        android:id="@+id/subBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        app:layout_constraintTop_toBottomOf="@id/result"
+        app:layout_constraintStart_toEndOf="@id/addBtn"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp" />
+    <Button
+        android:id="@+id/mulBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="×"
+        app:layout_constraintTop_toBottomOf="@id/result"
+        app:layout_constraintStart_toEndOf="@id/subBtn"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp" />
+    <Button
+        android:id="@+id/divBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="÷"
+        app:layout_constraintTop_toBottomOf="@id/result"
+        app:layout_constraintStart_toEndOf="@id/mulBtn"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+MainActivity.java –
+package com.example.arithmeticapp;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    EditText number1, number2;
+    TextView result;
+    Button addBtn, subBtn, mulBtn, divBtn;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        number1 = findViewById(R.id.number1);
+        number2 = findViewById(R.id.number2);
+        result = findViewById(R.id.result);
+        addBtn = findViewById(R.id.addBtn);
+        subBtn = findViewById(R.id.subBtn);
+        mulBtn = findViewById(R.id.mulBtn);
+        divBtn = findViewById(R.id.divBtn);
+        View.OnClickListener listener = v -> {
+            String input1 = number1.getText().toString();
+            String input2 = number2.getText().toString();
+            if (input1.isEmpty() || input2.isEmpty()) {
+                result.setText("Result: Please enter both numbers");
+                return;
+            }
+            double num1 = Double.parseDouble(input1);
+            double num2 = Double.parseDouble(input2);
+            double output = 0;
+            switch (v.getId()) {
+                case R.id.addBtn:
+                    output = num1 + num2;
+                    break;
+                case R.id.subBtn:
+                    output = num1 - num2;
+                    break;
+                case R.id.mulBtn:
+                    output = num1 * num2;
+                    break;
+                case R.id.divBtn:
+                    if (num2 == 0) {
+                        result.setText("Result: Cannot divide by zero");
+                        return;
+                    }
+                    output = num1 / num2;
+                    break;
+            }
+            result.setText("Result: " + output);
+        };
+        addBtn.setOnClickListener(listener);
+        subBtn.setOnClickListener(listener);
+        mulBtn.setOnClickListener(listener);
+        divBtn.setOnClickListener(listener);
+    }
+} 
+2. Create an Android Application that sends the Notification on click of the button and Display the notification message on the second activity. 
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+    <Button
+        android:id="@+id/notifyBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Notification"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+MainActivity.java –
+package com.example.notificationapp;
+import android.app.*;
+import android.content.*;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+public class MainActivity extends AppCompatActivity {
+    Button notifyBtn;
+    String channelId = "notify_channel";
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        notifyBtn = findViewById(R.id.notifyBtn);
+        createNotificationChannel(); // Required for Android 8+
+        notifyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("message", "Hello from the Notification!");
+                PendingIntent pendingIntent = PendingIntent.getActivity(
+                        MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, channelId)
+                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setContentTitle("Notification")
+                        .setContentText("Click to view message")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true);
+
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity.this);
+                notificationManager.notify(1, builder.build());
+            }
+        });
+    }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "NotificationChannel";
+            String description = "Channel for NotificationApp";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+}
+SecondActivity.java –
+package com.example.notificationapp;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class SecondActivity extends AppCompatActivity {
+    TextView displayMessage;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        displayMessage = findViewById(R.id.displayMessage);
+        String message = getIntent().getStringExtra("message");
+        displayMessage.setText(message);
+    }
+}
+activity_second.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+    <TextView
+        android:id="@+id/displayMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Message will appear here"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+AndroidManifest.xml –
+<application ... >
+    <activity android:name=".SecondActivity" />
+</application>

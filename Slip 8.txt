@@ -1,0 +1,146 @@
+Slip – 8
+1. Create a Simple Application Which Shows Greeting information to User.
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+    <TextView
+        android:id="@+id/tvGreeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome!"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp" />
+    <Button
+        android:id="@+id/btnGreet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Greeting" />
+</LinearLayout>
+MainActivity.java –
+package com.example.greetingapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+public class MainActivity extends AppCompatActivity {
+    TextView tvGreeting;
+    Button btnGreet;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        tvGreeting = findViewById(R.id.tvGreeting);
+        btnGreet = findViewById(R.id.btnGreet);
+        btnGreet.setOnClickListener(v -> {
+            tvGreeting.setText("Hello, dear User!");
+        });
+    }
+}
+2.Create an Android application, where the user can enter player name and points in one view and display it in another view.
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+    <EditText
+        android:id="@+id/etPlayerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Player Name"
+        android:layout_marginBottom="16dp" />
+    <EditText
+        android:id="@+id/etPoints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Points"
+        android:inputType="number"
+        android:layout_marginBottom="16dp" />
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+</LinearLayout>
+MainActivity.java –
+package com.example.playerinfoapp;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    EditText etPlayerName, etPoints;
+    Button btnSubmit;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        etPlayerName = findViewById(R.id.etPlayerName);
+        etPoints = findViewById(R.id.etPoints);
+        btnSubmit = findViewById(R.id.btnSubmit);
+        btnSubmit.setOnClickListener(v -> {
+            String name = etPlayerName.getText().toString().trim();
+            String points = etPoints.getText().toString().trim();
+            Intent intent = new Intent(MainActivity.this, DisplayActivity.class);
+            intent.putExtra("player_name", name);
+            intent.putExtra("player_points", points);
+            startActivity(intent);
+        });
+    }
+}
+activity_display.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+    <TextView
+        android:id="@+id/tvPlayerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+    <TextView
+        android:id="@+id/tvPlayerPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" />
+</LinearLayout>
+DisplayActivity.java – 
+package com.example.playerinfoapp;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class DisplayActivity extends AppCompatActivity {
+    TextView tvPlayerName, tvPlayerPoints;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_display);
+        tvPlayerName = findViewById(R.id.tvPlayerName);
+        tvPlayerPoints = findViewById(R.id.tvPlayerPoints);
+
+        String name = getIntent().getStringExtra("player_name");
+        String points = getIntent().getStringExtra("player_points");
+        tvPlayerName.setText("Player: " + name);
+        tvPlayerPoints.setText("Points: " + points);
+    }
+}
+AndroidManifest.xml –
+<activity android:name=".DisplayActivity"></activity>

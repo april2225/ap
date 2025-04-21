@@ -1,0 +1,194 @@
+Slip – 27
+1. Write an Android application to accept two numbers from the user, and displays
+them, but reject input if both numbers are greater than 10 and asks for two new
+Numbers. 10M
+Code : android_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <!-- EditText for First Number -->
+    <EditText
+        android:id="@+id/etFirstNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter First Number"
+        android:inputType="number" />
+
+    <!-- EditText for Second Number -->
+    <EditText
+        android:id="@+id/etSecondNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Second Number"
+        android:inputType="number" />
+
+    <!-- Button to Submit -->
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" 
+        android:layout_marginTop="16dp"/>
+
+    <!-- TextView to Display the Numbers -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result will be displayed here"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>
+
+MainActivity.java file
+package com.example.numberinputdemo;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText etFirstNumber, etSecondNumber;
+    Button btnSubmit;
+    TextView tvResult;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etFirstNumber = findViewById(R.id.etFirstNumber);
+        etSecondNumber = findViewById(R.id.etSecondNumber);
+        btnSubmit = findViewById(R.id.btnSubmit);
+        tvResult = findViewById(R.id.tvResult);
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the input values from EditText fields
+                String firstInput = etFirstNumber.getText().toString();
+                String secondInput = etSecondNumber.getText().toString();
+
+                // Validate inputs to ensure they are not empty
+                if (firstInput.isEmpty() || secondInput.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter both numbers", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Convert input strings to integers
+                int firstNumber = Integer.parseInt(firstInput);
+                int secondNumber = Integer.parseInt(secondInput);
+
+                // Check if both numbers are greater than 10
+                if (firstNumber > 10 && secondNumber > 10) {
+                    // If both numbers are greater than 10, ask for new inputs
+                    Toast.makeText(MainActivity.this, "Both numbers cannot be greater than 10. Please enter new numbers.", Toast.LENGTH_LONG).show();
+                    etFirstNumber.setText(""); // Clear the inputs
+                    etSecondNumber.setText("");
+                    tvResult.setText(""); // Clear previous result
+                } else {
+                    // Display the numbers if the condition is not met
+                    tvResult.setText("First Number: " + firstNumber + "\nSecond Number: " + secondNumber);
+                }
+            }
+        });
+    }
+}
+
+ 2.Create an Android Application that Demonstrates ContextMenu. 15M
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <!-- TextView that will show context menu on long press -->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Long press here to show Context Menu"
+        android:textSize="18sp" />
+</LinearLayout>
+context_menu.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/option_copy"
+        android:title="Copy" />
+    <item
+        android:id="@+id/option_paste"
+        android:title="Paste" />
+    <item
+        android:id="@+id/option_delete"
+        android:title="Delete" />
+</menu>
+MainActivity.java –
+package com.example.contextmenuapp;
+
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    TextView textView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        textView = findViewById(R.id.textView);
+
+        // Register the TextView for context menu
+        registerForContextMenu(textView);
+    }
+
+    // Create the context menu
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        // Set different menu options
+        if (v.getId() == R.id.textView) {
+            getMenuInflater().inflate(R.menu.context_menu, menu); // Inflate context menu items from XML
+        }
+    }
+
+    // Handle context menu item selections
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.option_copy:
+                Toast.makeText(this, "Copy Selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.option_paste:
+                Toast.makeText(this, "Paste Selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.option_delete:
+                Toast.makeText(this, "Delete Selected", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+}

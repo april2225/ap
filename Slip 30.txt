@@ -1,0 +1,289 @@
+Slip – 30
+1. Create an Android Application that Demonstrate RatingBar and Display the
+number of stars selected on Toast and TextView. 10M
+code :  android_main.xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <!-- RatingBar to select rating -->
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:layout_marginTop="20dp"
+        android:rating="0" />
+
+    <!-- TextView to display rating -->
+    <TextView
+        android:id="@+id/textViewRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating: 0"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp" />
+
+    <!-- Button to display rating in Toast -->
+    <Button
+        android:id="@+id/buttonShowRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Rating"
+        android:layout_marginTop="20dp" />
+</LinearLayout>
+
+MainActivity.java file -
+package com.example.ratingbar;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private RatingBar ratingBar;
+    private TextView textViewRating;
+    private Button buttonShowRating;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Initialize views
+        ratingBar = findViewById(R.id.ratingBar);
+        textViewRating = findViewById(R.id.textViewRating);
+        buttonShowRating = findViewById(R.id.buttonShowRating);
+
+        // Set listener for the rating bar to update the TextView as the user changes the rating
+        ratingBar.setOnRatingBarChangeListener((ratingBar, rating, fromUser) -> {
+            // Update the TextView with the current rating
+            textViewRating.setText("Rating: " + rating);
+        });
+
+        // Set click listener for the button to display the rating in a Toast
+        buttonShowRating.setOnClickListener(v -> {
+            // Get the rating value
+            float rating = ratingBar.getRating();
+
+            // Display the rating in a Toast
+            Toast.makeText(MainActivity.this, "Selected Rating: " + rating, Toast.LENGTH_SHORT).show();
+        });
+    }
+}
+
+2. Create Table Employee(Eno, Ename, Designation,Salary). Create Android
+Application for performing the following operation on the table. (Using SQLite
+Database)
+i) Insert New Employee Details.
+ii) Display all the Employee details 15M
+code :  android_main.xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <!-- Input fields to enter employee details -->
+    <EditText
+        android:id="@+id/editTextEno"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Employee Number (Eno)"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTextEname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Employee Name"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextDesignation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Designation"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextSalary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Salary"
+        android:inputType="numberDecimal" />
+
+    <!-- Button to insert employee details -->
+    <Button
+        android:id="@+id/buttonInsert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Insert Employee"
+        android:layout_marginTop="20dp" />
+
+    <!-- Button to display all employees -->
+    <Button
+        android:id="@+id/buttonShowAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show All Employees"
+        android:layout_marginTop="20dp" />
+
+    <!-- TextView to display employee details -->
+    <TextView
+        android:id="@+id/textViewEmployees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Employee details will be shown here"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>
+
+MainActivity.java file -
+package com.example.employeeapp;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText editTextEno, editTextEname, editTextDesignation, editTextSalary;
+    private Button buttonInsert, buttonShowAll;
+    private TextView textViewEmployees;
+
+    // SQLite Database Helper
+    private SQLiteDatabase database;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Initialize the views
+        editTextEno = findViewById(R.id.editTextEno);
+        editTextEname = findViewById(R.id.editTextEname);
+        editTextDesignation = findViewById(R.id.editTextDesignation);
+        editTextSalary = findViewById(R.id.editTextSalary);
+        buttonInsert = findViewById(R.id.buttonInsert);
+        buttonShowAll = findViewById(R.id.buttonShowAll);
+        textViewEmployees = findViewById(R.id.textViewEmployees);
+
+        // Initialize the SQLite database
+        EmployeeDBHelper dbHelper = new EmployeeDBHelper(this);
+        database = dbHelper.getWritableDatabase();
+
+        // Insert employee details
+        buttonInsert.setOnClickListener(v -> insertEmployeeDetails());
+
+        // Show all employee details
+        buttonShowAll.setOnClickListener(v -> showAllEmployeeDetails());
+    }
+
+    // Method to insert employee details into the database
+    private void insertEmployeeDetails() {
+        String eno = editTextEno.getText().toString();
+        String ename = editTextEname.getText().toString();
+        String designation = editTextDesignation.getText().toString();
+        String salary = editTextSalary.getText().toString();
+
+        // Check for empty fields
+        if (eno.isEmpty() || ename.isEmpty() || designation.isEmpty() || salary.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Insert the data into the database
+        String insertQuery = "INSERT INTO Employee (Eno, Ename, Designation, Salary) VALUES (" +
+                eno + ", '" + ename + "', '" + designation + "', " + salary + ")";
+        database.execSQL(insertQuery);
+
+        // Show confirmation message
+        Toast.makeText(this, "Employee details inserted successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    // Method to display all employee details
+    private void showAllEmployeeDetails() {
+        Cursor cursor = database.rawQuery("SELECT * FROM Employee", null);
+
+        // Check if the cursor is empty
+        if (cursor.getCount() == 0) {
+            textViewEmployees.setText("No employees found.");
+            return;
+        }
+
+        StringBuilder employeeDetails = new StringBuilder();
+        while (cursor.moveToNext()) {
+            int eno = cursor.getInt(0);
+            String ename = cursor.getString(1);
+            String designation = cursor.getString(2);
+            double salary = cursor.getDouble(3);
+
+            employeeDetails.append("Eno: ").append(eno).append("\n")
+                    .append("Ename: ").append(ename).append("\n")
+                    .append("Designation: ").append(designation).append("\n")
+                    .append("Salary: ").append(salary).append("\n\n");
+        }
+
+        // Display all employees
+        textViewEmployees.setText(employeeDetails.toString());
+        cursor.close();
+    }
+}
+
+EmployeeDBHelper.java -
+package com.example.employeeapp;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class EmployeeDBHelper extends SQLiteOpenHelper {
+
+    private static final String DATABASE_NAME = "EmployeeDB";
+    private static final int DATABASE_VERSION = 1;
+
+    // SQL query to create the Employee table
+    private static final String CREATE_TABLE_EMPLOYEE =
+            "CREATE TABLE Employee (" +
+            "Eno INTEGER PRIMARY KEY, " +
+            "Ename TEXT, " +
+            "Designation TEXT, " +
+            "Salary REAL);";
+
+    public EmployeeDBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // Create Employee table
+        db.execSQL(CREATE_TABLE_EMPLOYEE);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop the existing table if it exists
+        db.execSQL("DROP TABLE IF EXISTS Employee");
+        onCreate(db);
+    }
+}

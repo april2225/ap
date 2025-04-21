@@ -1,0 +1,157 @@
+Slip – 14
+1. Create a Simple Application Which Send ?Hello? message from one activity to another with help of Button (Use Intent).
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+    <Button
+        android:id="@+id/btnSendMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Hello to Second Activity" />
+</LinearLayout>
+MainActivity.java –
+package com.example.hellointent;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    Button btnSendMessage;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        btnSendMessage = findViewById(R.id.btnSendMessage);
+        // When button is clicked, start SecondActivity and send "Hello" message
+        btnSendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("message", "Hello");
+                startActivity(intent);
+            }
+        });
+    }
+}
+activity_second.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textViewMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" />
+    
+</LinearLayout>
+SecondActivity.java  -
+package com.example.hellointent;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class SecondActivity extends AppCompatActivity {
+    TextView textViewMessage;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        textViewMessage = findViewById(R.id.textViewMessage);
+        // Get the "Hello" message sent from MainActivity
+        Intent intent = getIntent();
+        String message = intent.getStringExtra("message");
+        // Display the received message
+        if (message != null) {
+            textViewMessage.setText(message);
+        }
+    }
+}
+AndroidManifest.xml –
+<application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="Hello Intent App"
+    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+    <activity android:name=".SecondActivity" />
+    <activity android:name=".MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+</application>
+2. Create an Android application to demonstrate Progress Dialog Box using AsyncTask. 15M
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <!-- Your UI components go here -->
+</RelativeLayout>
+MainActivity.java –
+// src/main/java/com/example/progressdialogdemo/MainActivity.java
+package com.example.progressdialogdemo;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    Button btnStartProgress;
+    ProgressDialog progressDialog;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        btnStartProgress = findViewById(R.id.btnStartProgress);
+        btnStartProgress.setOnClickListener(v -> {
+            new LoadProgressTask().execute();
+        });
+    }
+    private class LoadProgressTask extends AsyncTask<Void, Integer, Void> {
+        int progressStatus = 0;
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setTitle("ProgressDialog bar example");
+            progressDialog.setMessage("Its loading....");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setMax(100);
+            progressDialog.setProgress(0);
+            progressDialog.show();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            while (progressStatus < 100) {
+                progressStatus++;
+                publishProgress(progressStatus);
+                try {
+                    Thread.sleep(50); // simulate loading
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            progressDialog.setProgress(values[0]);
+        }
+        @Override
+        protected void onPostExecute(Void unused) {
+            progressDialog.dismiss();
+        }
+    }
+}
+

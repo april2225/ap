@@ -1,0 +1,155 @@
+Slip -26
+1. Create an Android Application to Construct image switcher using setFactory(). 10M
+code : activity_main.xml –
+xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <!-- ImageSwitcher -->
+    <ImageSwitcher
+        android:id="@+id/imageSwitcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"/>
+
+    <!-- Button to Switch Image -->
+    <Button
+        android:id="@+id/btnSwitchImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch Image" />
+</LinearLayout>
+
+MainActivity.java file -
+package com.example.imageswitcherexample;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageSwitcher;
+import android.widget.ImageView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private ImageSwitcher imageSwitcher;
+    private Button btnSwitchImage;
+
+    private int[] images = {R.drawable.image1, R.drawable.image2, R.drawable.image3};
+    private int currentImageIndex = 0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Initialize ImageSwitcher
+        imageSwitcher = findViewById(R.id.imageSwitcher);
+        btnSwitchImage = findViewById(R.id.btnSwitchImage);
+
+        // Set the factory for ImageSwitcher to create an ImageView for the images
+        imageSwitcher.setFactory(() -> new ImageView(MainActivity.this));
+
+        // Set the first image to be shown
+        imageSwitcher.setImageResource(images[currentImageIndex]);
+
+        // Set OnClickListener to the button to switch images
+        btnSwitchImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Increment the image index
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+
+                // Switch the image in ImageSwitcher
+                imageSwitcher.setImageResource(images[currentImageIndex]);
+            }
+        });
+    }
+}
+
+2.Create an Android Application that Demonstrates ContextMenu. 15M
+Code : Android_main.xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <!-- TextView to show context menu -->
+    <TextView
+        android:id="@+id/tvContextMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Long press me to show context menu"
+        android:textSize="18sp" />
+</LinearLayout>
+
+MainActivity.java file –
+
+package com.example.contextmenudemo;
+
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private TextView tvContextMenu;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        tvContextMenu = findViewById(R.id.tvContextMenu);
+
+        // Register the TextView to show the context menu when long-pressed
+        registerForContextMenu(tvContextMenu);
+    }
+
+    // Create the context menu when the long press occurs
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if (v.getId() == R.id.tvContextMenu) {
+            // Add items to the context menu
+            menu.setHeaderTitle("Choose an action");
+            menu.add(0, 1, 0, "Option 1");
+            menu.add(0, 2, 0, "Option 2");
+            menu.add(0, 3, 0, "Option 3");
+        }
+    }
+
+    // Handle context menu item selection
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 1:
+                Toast.makeText(this, "Option 1 Selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case 2:
+                Toast.makeText(this, "Option 2 Selected", Toast.LENGTH_SHORT).show();
+                return true;
+            case 3:
+                Toast.makeText(this, "Option 3 Selected", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+}
+
+

@@ -1,0 +1,108 @@
+Slip – 12
+1. Create a Simple Application, which read a positive number from the user and display its factorial value in another activity.
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center">
+    <EditText
+        android:id="@+id/editNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a positive number"
+        android:inputType="number"/>
+    <Button
+        android:id="@+id/btnCalculate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calculate Factorial"
+        android:layout_marginTop="20dp"/>
+</LinearLayout>
+MainActivity.java –
+package com.example.factorialapp;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    EditText editNumber;
+    Button btnCalculate;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editNumber = findViewById(R.id.editNumber);
+        btnCalculate = findViewById(R.id.btnCalculate);
+        btnCalculate.setOnClickListener(v -> {
+            String input = editNumber.getText().toString().trim();
+            if (input.isEmpty()) {
+                Toast.makeText(this, "Please enter a number", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            int number = Integer.parseInt(input);
+            if (number < 0) {
+                Toast.makeText(this, "Enter a positive number", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+            intent.putExtra("number", number);
+            startActivity(intent);
+        });
+    }
+}
+activity_result.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+    <TextView
+        android:id="@+id/textResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"/>
+</LinearLayout>
+ResultActivity.java –
+package com.example.factorialapp;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import java.math.BigInteger;
+public class ResultActivity extends AppCompatActivity {
+    TextView textResult;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_result);
+        textResult = findViewById(R.id.textResult);
+        int number = getIntent().getIntExtra("number", 0);
+        BigInteger factorial = calculateFactorial(number);
+        textResult.setText("Factorial of " + number + " is:\n" + factorial);
+    }
+    private BigInteger calculateFactorial(int num) {
+        BigInteger result = BigInteger.ONE;
+        for (int i = 1; i <= num; i++) {
+            result = result.multiply(BigInteger.valueOf(i));
+        }
+        return result;
+    }
+}
+AndroidManifest.xml –
+<application ...>
+    <activity android:name=".ResultActivity"></activity>
+    <activity android:name=".MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+</application>
+2. Create Following Table: Emp (emp_no,emp_name,address,phone,salary) and Dept(dept_no,dept_name,location). Insert data in Emp and Dept tables.
+Code : 

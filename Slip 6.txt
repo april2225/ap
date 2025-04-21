@@ -1,0 +1,225 @@
+Slip – 6
+1. Create a Simple Application that performs Arithmetic Operations. (Use constraint layout)
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+    <EditText
+        android:id="@+id/etNum1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter number 1"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <EditText
+        android:id="@+id/etNum2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter number 2"
+        android:inputType="numberDecimal"
+        app:layout_constraintTop_toBottomOf="@id/etNum1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+    <!-- Buttons -->
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="+"
+        app:layout_constraintTop_toBottomOf="@id/etNum2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSub"
+        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontalWeight="1" />
+    <Button
+        android:id="@+id/btnSub"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="-"
+        app:layout_constraintTop_toTopOf="@id/btnAdd"
+        app:layout_constraintStart_toEndOf="@id/btnAdd"
+        app:layout_constraintEnd_toStartOf="@+id/btnMul"
+        app:layout_constraintHorizontalWeight="1" />
+    <Button
+        android:id="@+id/btnMul"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="×"
+        app:layout_constraintTop_toTopOf="@id/btnAdd"
+        app:layout_constraintStart_toEndOf="@id/btnSub"
+        app:layout_constraintEnd_toStartOf="@+id/btnDiv"
+        app:layout_constraintHorizontalWeight="1" />
+    <Button
+        android:id="@+id/btnDiv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="÷"
+        app:layout_constraintTop_toTopOf="@id/btnAdd"
+        app:layout_constraintStart_toEndOf="@id/btnMul"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontalWeight="1" />
+    <!-- Result -->
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Result will appear here"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/btnAdd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+MainActivity.java –
+package com.example.simplecalculator;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.*;
+public class MainActivity extends AppCompatActivity {
+    EditText etNum1, etNum2;
+    Button btnAdd, btnSub, btnMul, btnDiv;
+    TextView tvResult;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        etNum1 = findViewById(R.id.etNum1);
+        etNum2 = findViewById(R.id.etNum2);
+        btnAdd = findViewById(R.id.btnAdd);
+        btnSub = findViewById(R.id.btnSub);
+        btnMul = findViewById(R.id.btnMul);
+        btnDiv = findViewById(R.id.btnDiv);
+        tvResult = findViewById(R.id.tvResult);
+        btnAdd.setOnClickListener(v -> calculate('+'));
+        btnSub.setOnClickListener(v -> calculate('-'));
+        btnMul.setOnClickListener(v -> calculate('*'));
+        btnDiv.setOnClickListener(v -> calculate('/'));
+    }
+    private void calculate(char operator) {
+        String s1 = etNum1.getText().toString().trim();
+        String s2 = etNum2.getText().toString().trim();
+        if (s1.isEmpty() || s2.isEmpty()) {
+            tvResult.setText("Enter both numbers");
+            return;
+        }
+        double num1 = Double.parseDouble(s1);
+        double num2 = Double.parseDouble(s2);
+        double result = 0;
+        switch (operator) {
+            case '+': result = num1 + num2; break;
+            case '-': result = num1 - num2; break;
+            case '*': result = num1 * num2; break;
+            case '/':
+                if (num2 == 0) {
+                    tvResult.setText("Cannot divide by zero");
+                    return;
+                }
+                result = num1 / num2;
+                break;
+        }
+        tvResult.setText("Result: " + result);
+    }
+}
+2. Construct a bank app to display different menus like withdrawal and deposit.
+Code :  activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+    <!-- Balance Display -->
+    <TextView
+        android:id="@+id/tvBalance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Balance: ?0.00"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="30dp" />
+    <!-- Input Amount -->
+    <EditText
+        android:id="@+id/etAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Amount"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="20dp" />
+    <!-- Deposit Button -->
+    <Button
+        android:id="@+id/btnDeposit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Deposit" />
+    <!-- Withdraw Button -->
+    <Button
+        android:id="@+id/btnWithdraw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Withdraw"
+        android:layout_marginTop="10dp" />
+</LinearLayout>
+MainActivity.java –
+package com.example.bankapp;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.*;
+public class MainActivity extends AppCompatActivity {
+    TextView tvBalance;
+    EditText etAmount;
+    Button btnDeposit, btnWithdraw;
+    double balance = 0.0;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        tvBalance = findViewById(R.id.tvBalance);
+        etAmount = findViewById(R.id.etAmount);
+        btnDeposit = findViewById(R.id.btnDeposit);
+        btnWithdraw = findViewById(R.id.btnWithdraw);
+        btnDeposit.setOnClickListener(v -> {
+            double amount = getAmount();
+            if (amount > 0) {
+                balance += amount;
+                updateBalance();
+                Toast.makeText(this, "?" + amount + " deposited!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnWithdraw.setOnClickListener(v -> {
+            double amount = getAmount();
+            if (amount > 0) {
+                if (amount <= balance) {
+                    balance -= amount;
+                    updateBalance();
+                    Toast.makeText(this, "?" + amount + " withdrawn!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Insufficient Balance", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private double getAmount() {
+        String input = etAmount.getText().toString().trim();
+        if (input.isEmpty()) {
+            Toast.makeText(this, "Please enter an amount", Toast.LENGTH_SHORT).show();
+            return 0;
+        }
+        return Double.parseDouble(input);
+    }
+    private void updateBalance() {
+        tvBalance.setText("Balance: ?" + String.format("%.2f", balance));
+        etAmount.setText(""); // clear input
+    }
+}

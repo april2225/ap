@@ -1,0 +1,111 @@
+Slip -23
+1. Create an Android App with Login Screen. On successful login, gives a message to go to
+the next Activity (Without Using Database). 10M
+code : android_main.xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_marginTop="24dp" />
+</LinearLayout>
+
+MainActivity.java
+package com.example.loginapp;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText etUsername, etPassword;
+    Button btnLogin;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etUsername = findViewById(R.id.etUsername);
+        etPassword = findViewById(R.id.etPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+
+        btnLogin.setOnClickListener(v -> {
+            String username = etUsername.getText().toString();
+            String password = etPassword.getText().toString();
+
+            // Hardcoded credentials: user / pass
+            if (username.equals("user") && password.equals("pass")) {
+                Toast.makeText(MainActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(MainActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
+
+?? Step 3: activity_second.xml (Next Screen)
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:text="Welcome to the Next Activity!"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+
+?? Step 4: SecondActivity.java
+
+package com.example.loginapp;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class SecondActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+    }
+}
+Android Manifest. File -
+<activity android:name=".SecondActivity" />
+
+2. Create an Android application to perform following operations on table Student (Sid,
+Sname ,phno). Use auto increment for Sid and Perform following Operations.
+a) Add Student and display its information.
+b) Delete Student 15M
+code : 

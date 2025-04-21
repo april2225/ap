@@ -1,0 +1,85 @@
+Slip – 21
+1. Create an Android Application that Demonstrate Radio Button 10M
+Code : activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RadioButton
+            android:id="@+id/male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male" />
+        <RadioButton
+            android:id="@+id/female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female" />
+    </RadioGroup>
+    <Button
+        android:id="@+id/submitBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+</LinearLayout>
+
+MainActivity.java – 
+public class MainActivity extends AppCompatActivity {
+    RadioGroup radioGroup;
+    Button submitBtn;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        radioGroup = findViewById(R.id.radioGroup);
+        submitBtn = findViewById(R.id.submitBtn);
+        submitBtn.setOnClickListener(v -> {
+            int selectedId = radioGroup.getCheckedRadioButtonId();
+            if (selectedId != -1) {
+                RadioButton selectedRadio = findViewById(selectedId);
+                String gender = selectedRadio.getText().toString();
+                Toast.makeText(getApplicationContext(), "Selected: " + gender, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Please select gender", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}
+2. Create an Android Application that Demonstrate ListView and Onclick of List
+Display the Toast.
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+
+MainActivity.java – 
+public class MainActivity extends AppCompatActivity {
+    ListView listView;
+    String[] fruits = {"Apple", "Banana", "Mango", "Grapes", "Orange"};
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        listView = findViewById(R.id.listView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, fruits);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedItem = fruits[position];
+            Toast.makeText(getApplicationContext(), "You clicked: " + selectedItem, Toast.LENGTH_SHORT).show();
+        });
+    }
+}

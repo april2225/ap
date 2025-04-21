@@ -1,0 +1,193 @@
+Slip – 3
+1.Create a Simple Application Which Send ?Hello? message from one activity to another with help of Button (Use Intent).
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Hello to Second Activity" />
+</LinearLayout>
+MainActivity.java –
+package com.example.hellointent;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    Button btnSend;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        btnSend = findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+            intent.putExtra("message", "Hello");
+            startActivity(intent);
+        });
+    }
+}
+activity_second.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Waiting for message..."
+        android:textSize="24sp"/>
+</LinearLayout>
+
+SecondActivity.java –
+package com.example.hellointent;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class SecondActivity extends AppCompatActivity {
+    TextView tvMessage;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        tvMessage = findViewById(R.id.tvMessage);
+        String message = getIntent().getStringExtra("message");
+        tvMessage.setText(message);
+    }
+}
+AndroidManifest.xml –
+<activity android:name=".SecondActivity"></activity>
+
+2.  Create a simple calculator and perform appropriate operations.
+Code : activity_main.xml – 
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#ffffff">
+    <EditText
+        android:id="@+id/etNum1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter First Number"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="12dp"/>
+    <EditText
+        android:id="@+id/etNum2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Second Number"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="24dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+" />
+        <Button
+            android:id="@+id/btnSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="?"
+            android:layout_marginStart="8dp" />
+        <Button
+            android:id="@+id/btnMul"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="×"
+            android:layout_marginStart="8dp" />
+        <Button
+            android:id="@+id/btnDiv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="÷"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result will appear here"
+        android:textSize="20sp"
+        android:layout_marginTop="24dp"
+        android:textColor="#000000"/>
+</LinearLayout>
+
+MainActivity.java – 
+package com.example.simplecalculator;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+public class MainActivity extends AppCompatActivity {
+    EditText etNum1, etNum2;
+    TextView tvResult;
+    Button btnAdd, btnSub, btnMul, btnDiv;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        etNum1 = findViewById(R.id.etNum1);
+        etNum2 = findViewById(R.id.etNum2);
+        tvResult = findViewById(R.id.tvResult);
+        btnAdd = findViewById(R.id.btnAdd);
+        btnSub = findViewById(R.id.btnSub);
+        btnMul = findViewById(R.id.btnMul);
+        btnDiv = findViewById(R.id.btnDiv);
+        btnAdd.setOnClickListener(v -> calculate('+'));
+        btnSub.setOnClickListener(v -> calculate('-'));
+        btnMul.setOnClickListener(v -> calculate('*'));
+        btnDiv.setOnClickListener(v -> calculate('/'));
+    }
+    private void calculate(char operator) {
+        String s1 = etNum1.getText().toString().trim();
+        String s2 = etNum2.getText().toString().trim();
+        if (s1.isEmpty() || s2.isEmpty()) {
+            tvResult.setText("Please enter both numbers");
+            return;
+        }
+        double num1 = Double.parseDouble(s1);
+        double num2 = Double.parseDouble(s2);
+        double result = 0;
+        switch (operator) {
+            case '+':
+                result = num1 + num2;
+                break;
+            case '-':
+                result = num1 - num2;
+                break;
+            case '*':
+                result = num1 * num2;
+                break;
+            case '/':
+                if (num2 == 0) {
+                    tvResult.setText("Cannot divide by zero");
+                    return;
+                }
+                result = num1 / num2;
+                break;
+        }
+        tvResult.setText("Result: " + result);
+    }
+}

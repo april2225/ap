@@ -1,0 +1,131 @@
+Slip - 1
+1. Write an Android Program to Demonstrate Date Picker Dialog in Android on click of Edit Text
+Code : activity_main.xml :
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".MainActivity">
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Date"
+        android:focusable="false"
+        android:clickable="true"
+        android:inputType="none"
+        android:drawableRight="@android:drawable/ic_menu_today"
+        android:padding="10dp"/>
+</LinearLayout>
+MainActivity.java :
+package com.example.slip1_1;
+import android.app.DatePickerDialog;
+import android.os.Bundle;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.Calendar;
+public class MainActivity extends AppCompatActivity {
+    EditText editTextDate;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editTextDate = findViewById(R.id.editTextDate);
+        editTextDate.setOnClickListener(v -> {
+            // Get current date
+            final Calendar calendar = Calendar.getInstance();
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
+            // Create DatePickerDialog
+            DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        // Set selected date in EditText
+                        String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                        editTextDate.setText(selectedDate);
+                    }, year, month, day);
+            datePickerDialog.show();
+        });
+    }
+}
+2. Java Android Program to demonstrate login form with validation.
+Code :- activity_main.xml :
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp"
+    tools:context=".MainActivity">
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:padding="12dp"
+        android:marginBottom="12dp" />
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:marginBottom="12dp" />
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:padding="12dp" />
+</LinearLayout>
+
+MainActivity.java :
+package com.example.loginvalidation;
+import android.os.Bundle;
+import android.util.Patterns;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    EditText emailInput, passwordInput;
+    Button loginBtn;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        emailInput = findViewById(R.id.editTextEmail);
+        passwordInput = findViewById(R.id.editTextPassword);
+        loginBtn = findViewById(R.id.buttonLogin);
+        loginBtn.setOnClickListener(v -> {
+            String email = emailInput.getText().toString().trim();
+            String password = passwordInput.getText().toString().trim();
+            // Validation
+            if (email.isEmpty()) {
+                emailInput.setError("Email is required");
+                emailInput.requestFocus();
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailInput.setError("Enter a valid email");
+                emailInput.requestFocus();
+            } else if (password.isEmpty()) {
+                passwordInput.setError("Password is required");
+                passwordInput.requestFocus();
+            } else if (password.length() < 6) {
+                passwordInput.setError("Password should be at least 6 characters");
+                passwordInput.requestFocus();
+            } else {
+                Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+}

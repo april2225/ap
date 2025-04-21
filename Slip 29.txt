@@ -1,0 +1,238 @@
+Slip -29
+1.Create an Android Application to accept a number and display the multiplication
+table. (Use table Layout) 10M
+code :  activity_main.xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <!-- EditText to enter the number -->
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a number"
+        android:inputType="number"
+        android:textSize="18sp" />
+
+    <!-- Button to generate the multiplication table -->
+    <Button
+        android:id="@+id/buttonGenerate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generate Multiplication Table"
+        android:layout_marginTop="20dp" />
+
+    <!-- TableLayout to display the multiplication table -->
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:stretchColumns="1" />
+</LinearLayout>
+
+MainActivity.java file
+package com.example.multiplicationtable;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText editTextNumber;
+    private Button buttonGenerate;
+    private TableLayout tableLayout;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Initialize views
+        editTextNumber = findViewById(R.id.editTextNumber);
+        buttonGenerate = findViewById(R.id.buttonGenerate);
+        tableLayout = findViewById(R.id.tableLayout);
+
+        // Set onClickListener for button
+        buttonGenerate.setOnClickListener(v -> generateMultiplicationTable());
+    }
+
+    private void generateMultiplicationTable() {
+        // Clear the table before generating new one
+        tableLayout.removeAllViews();
+
+        // Get the number entered by the user
+        String numberStr = editTextNumber.getText().toString();
+
+        // Check if the number is empty
+        if (numberStr.isEmpty()) {
+            Toast.makeText(MainActivity.this, "Please enter a number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int number = Integer.parseInt(numberStr);
+
+        // Generate multiplication table (1 to 10)
+        for (int i = 1; i <= 10; i++) {
+            // Create a new TableRow for each row in the table
+            TableRow tableRow = new TableRow(this);
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.MATCH_PARENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+            // Create TextViews to show the multiplication expression and result
+            TextView textView = new TextView(this);
+            textView.setText(number + " x " + i + " = " + (number * i));
+            textView.setTextSize(18);
+            textView.setPadding(10, 10, 10, 10);
+
+            // Add TextView to the TableRow
+            tableRow.addView(textView);
+
+            // Add TableRow to the TableLayout
+            tableLayout.addView(tableRow);
+        }
+    }
+}
+2.Construct an Android Application to accept a number and calculate Factorial and Sum of
+Digits of a given number using Context Menu.
+Code :  activity_main.xml file
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <!-- EditText to accept the number -->
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a number"
+        android:inputType="numberDecimal"
+        android:textSize="18sp" />
+
+    <!-- Button to open Context Menu -->
+    <Button
+        android:id="@+id/buttonShowMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Options"
+        android:layout_marginTop="20dp" />
+
+    <!-- TextView to display result -->
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Result will be shown here"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>
+
+MainActivity.java file -
+package com.example.factorialsumdigits;
+
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText editTextNumber;
+    private Button buttonShowMenu;
+    private TextView textViewResult;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        editTextNumber = findViewById(R.id.editTextNumber);
+        buttonShowMenu = findViewById(R.id.buttonShowMenu);
+        textViewResult = findViewById(R.id.textViewResult);
+
+        // Registering the button for the context menu
+        registerForContextMenu(buttonShowMenu);
+
+        // Set up click listener to show context menu when button is clicked
+        buttonShowMenu.setOnClickListener(v -> openContextMenu(v));
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        // Adding items to the context menu
+        menu.add(0, 1, 0, "Calculate Factorial");
+        menu.add(0, 2, 1, "Sum of Digits");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        String numberStr = editTextNumber.getText().toString();
+
+        // Check if the user has entered a number
+        if (numberStr.isEmpty()) {
+            Toast.makeText(this, "Please enter a number", Toast.LENGTH_SHORT).show();
+            return super.onContextItemSelected(item);
+        }
+
+        int number = Integer.parseInt(numberStr);
+
+        switch (item.getItemId()) {
+            case 1: // Calculate Factorial
+                long factorial = calculateFactorial(number);
+                textViewResult.setText("Factorial: " + factorial);
+                return true;
+            case 2: // Sum of Digits
+                int sumOfDigits = calculateSumOfDigits(number);
+                textViewResult.setText("Sum of Digits: " + sumOfDigits);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    // Method to calculate the factorial of a number
+    private long calculateFactorial(int number) {
+        long factorial = 1;
+        for (int i = 1; i <= number; i++) {
+            factorial *= i;
+        }
+        return factorial;
+    }
+
+    // Method to calculate the sum of digits of a number
+    private int calculateSumOfDigits(int number) {
+        int sum = 0;
+        while (number > 0) {
+            sum += number % 10;
+            number /= 10;
+        }
+        return sum;
+    }
+}
+

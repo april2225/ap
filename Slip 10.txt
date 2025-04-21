@@ -1,0 +1,143 @@
+Slip -10
+1. Create an Android Application that Demonstrate RatingBar and Display the number of stars selected on Toast and TextView.
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+    <TextView
+        android:id="@+id/instructionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rate this app"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"/>
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:layout_marginBottom="20dp"/>
+    <TextView
+        android:id="@+id/ratingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating: 0.0"
+        android:textSize="18sp"
+        android:layout_marginBottom="20dp"/>
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit Rating"
+        android:textSize="16sp"/>
+</LinearLayout>
+MainActivity.java –
+package com.example.ratingapp;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    private RatingBar ratingBar;
+    private TextView ratingTextView;
+    private Button submitButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        // Initialize views
+        ratingBar = findViewById(R.id.ratingBar);
+        ratingTextView = findViewById(R.id.ratingTextView);
+        submitButton = findViewById(R.id.submitButton);
+        // Set a listener for the ratingBar to update the text view as the user selects a rating
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                ratingTextView.setText("Rating: " + rating);
+            }
+        });
+        // Set a click listener for the button
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the selected rating
+                float rating = ratingBar.getRating();
+                // Show the rating in a Toast
+                Toast.makeText(MainActivity.this, "Selected Rating: " + rating + " stars", Toast.LENGTH_SHORT).show();
+                // Display the selected rating on the TextView
+                ratingTextView.setText("Rating: " + rating);
+            }
+        });
+    }
+}
+Android.Manifest.xml –
+<activity android:name=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+</activity>
+2. Java Android Program to Demonstrate Alert Dialog Box.
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+    <Button
+        android:id="@+id/showDialogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Alert Dialog" />
+</LinearLayout>
+MainActivity.java –
+package com.example.alertdialogdemo;
+import android.os.Bundle;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.widget.Button;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    Button showDialogButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        showDialogButton = findViewById(R.id.showDialogButton);
+        showDialogButton.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Exit Confirmation");
+            builder.setMessage("Are you sure you want to exit?");
+            builder.setPositiveButton("Yes", (dialog, which) ->
+                Toast.makeText(getApplicationContext(), "You clicked YES", Toast.LENGTH_SHORT).show()
+            );
+            builder.setNegativeButton("No", (dialog, which) ->
+                Toast.makeText(getApplicationContext(), "You clicked NO", Toast.LENGTH_SHORT).show()
+            );
+            builder.setNeutralButton("Cancel", (dialog, which) ->
+                Toast.makeText(getApplicationContext(), "You clicked CANCEL", Toast.LENGTH_SHORT).show()
+            );
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+    }
+}
+AndroidManifest.xml –
+<activity android:name=".MainActivity"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+    </intent-filter>
+</activity>

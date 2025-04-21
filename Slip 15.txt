@@ -1,0 +1,186 @@
+Slip – 15
+1. Create a Simple Application, which read a positive number from the user and display its factorial value in another activity.
+Code :  activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Enter a positive number"
+        android:importantForAccessibility="yes" />
+    <Button
+        android:id="@+id/buttonCalculate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calculate Factorial" />
+</LinearLayout>
+activity_second.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <TextView
+        android:id="@+id/textViewResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Factorial: "
+        android:textSize="18sp"
+        android:importantForAccessibility="yes" />
+</LinearLayout>
+MainActivity.java –
+package com.example.factorialapp;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    EditText editTextNumber;
+    Button buttonCalculate;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        editTextNumber = findViewById(R.id.editTextNumber);
+        buttonCalculate = findViewById(R.id.buttonCalculate);
+        buttonCalculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String input = editTextNumber.getText().toString();
+                if (input.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter a number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int number = Integer.parseInt(input);
+                if (number < 0) {
+                    Toast.makeText(MainActivity.this, "Please enter a positive number", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Calculate factorial and pass to second activity
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("number", number);
+                startActivity(intent);
+            }
+        });
+    }
+}
+SecondActivity.java –
+package com.example.factorialapp;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+public class SecondActivity extends AppCompatActivity {
+    TextView textViewResult;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        textViewResult = findViewById(R.id.textViewResult);
+        // Get the number passed from the first activity
+        int number = getIntent().getIntExtra("number", 0);
+        // Calculate the factorial
+        long factorial = calculateFactorial(number);
+        // Display the result
+        textViewResult.setText("Factorial: " + factorial);
+    }
+    private long calculateFactorial(int n) {
+        long result = 1;
+        for (int i = 1; i <= n; i++) {
+            result *= i;
+        }
+        return result;
+    }
+}
+AndroidManifest.xml –
+<activity android:name=".SecondActivity" />
+2. Develop an Android application that creates a custom Alert Dialog containing Friends Name and onClick of Friend Name Button greet accordingly.
+Code : activity_main.xml –
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="16dp">
+    <Button
+        android:id="@+id/showDialogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Friends" />
+</LinearLayout>
+custom_dialog.xml – 
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/buttonFriend1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alice" />
+    <Button
+        android:id="@+id/buttonFriend2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bob" />
+    <Button
+        android:id="@+id/buttonFriend3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+  android:text="Charlie" />
+</LinearLayout>
+MainActivity.java –
+package com.example.customdialog;
+import android.app.AlertDialog;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+    Button showDialogButton;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        showDialogButton = findViewById(R.id.showDialogButton);
+        showDialogButton.setOnClickListener(v -> showCustomDialog());
+    }
+    private void showCustomDialog() {
+        // Inflate the custom layout
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.custom_dialog, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+        Button buttonFriend1 = dialogView.findViewById(R.id.buttonFriend1);
+        Button buttonFriend2 = dialogView.findViewById(R.id.buttonFriend2);
+        Button buttonFriend3 = dialogView.findViewById(R.id.buttonFriend3);
+        buttonFriend1.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Hello, Alice!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+        buttonFriend2.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Hello, Bob!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+        buttonFriend3.setOnClickListener(v -> {
+            Toast.makeText(MainActivity.this, "Hello, Charlie!", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+        dialog.show();
+    }
+}
